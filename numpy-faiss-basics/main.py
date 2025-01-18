@@ -59,3 +59,9 @@ logging.info("Search completed in %.2f seconds.", time.time() - start_time)
 # Print results
 print("Distances:", distances)
 print("Indices:", indices)
+
+# Translate indices to original documents
+for i in range(k):
+    print(f"Nearest neighbor {i + 1}:")
+    print(f"Document: {documents[indices[0][i]]}")
+    print(f"Distance: {distances[0][i]}")
