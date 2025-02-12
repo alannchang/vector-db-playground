@@ -2,31 +2,40 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import List
 from ..models.document import Document, DocumentCreate, DocumentUpdate, SearchQuery
 import uuid
+from ..services.vector_store import VectorStore
+import numpy as np
 
 router = APIRouter()
+
+# Initialize the service
+vector_store = VectorStore()
 
 
 @router.post("/documents/", response_model=Document)
 async def create_document(document: DocumentCreate):
-    """Create a new document and generate its vector embedding."""
-    # TODO: Generate embedding using model
+    """Create a new document and store its vector embedding."""
+    # Create a new document with a random ID
+    doc_id = str(uuid.uuid4())
+
+    # Mock embedding for now (replace with actual embedding generation later)
+    mock_embedding = np.random.rand(384).astype(np.float32)
+
+    # Add vector to store with document ID
+    vector_store.add_vector(doc_id, mock_embedding)
+
     new_document = Document(
-        id=str(uuid.uuid4()),
+        id=doc_id,
         content=document.content,
         metadata=document.metadata,
-        embedding=None,  # Will be generated
-        embedding_model="all-MiniLM-L6-v2",  # Example model
+        embedding=mock_embedding.tolist(),  # Convert numpy array to list for JSON
+        embedding_model="mock-model",
     )
     return new_document
 
 
 @router.get("/documents/{doc_id}", response_model=Document)
-async def get_document(doc_id: str, include_embedding: bool = False):
-    """
-    Retrieve a document by its ID.
-    Optionally include the vector embedding in the response.
-    """
-    # TODO: Implement document retrieval
+async def get_document(doc_id: str):
+    """Retrieve a document by its ID."""
     raise HTTPException(status_code=501, detail="Not implemented")
 
 
@@ -45,14 +54,8 @@ async def delete_document(doc_id: str):
 
 
 @router.post("/documents/search/", response_model=List[Document])
-async def search_similar_documents(
-    query: SearchQuery, include_embeddings: bool = False, filter_metadata: dict = None
-):
-    """
-    Search for similar documents using vector similarity.
-    Optionally filter by metadata and include embeddings in response.
-    """
-    # TODO: Implement similarity search
+async def search_similar_documents(query: SearchQuery):
+    """Search for similar documents using vector similarity."""
     raise HTTPException(status_code=501, detail="Not implemented")
 
 
