@@ -7,9 +7,15 @@ vector_store = VectorStore()
 # Define your sentences
 sentences = [
     "I eat mango",
-    "mango is my favorite fruit",
-    "mango, apple, oranges are fruits",
-    "fruits are good for health",
+    "Mango is my favorite fruit",
+    "Mango, apple, oranges are fruits",
+    "Fruits are good for health",
+    "My dog's name is Mango",
+    "I am allergic to mango",
+    "Do you like mangoes",
+    "I do not like mangoes",
+    "Why are we talking about mangoes",
+    "I have a mango tree in my backyard"
 ]
 
 # Tokenization and Vocabulary Creation
@@ -35,7 +41,7 @@ for sentence, vector in sentence_vectors.items():
     vector_store.add_vector(sentence, vector)
 
 # Searching for Similarity
-query_sentence = "Mango is the best fruit"
+query_sentence = input("What is your mango related query? ")
 query_vector = np.zeros(len(vocabulary))
 query_tokens = query_sentence.lower().split()
 for token in query_tokens:
