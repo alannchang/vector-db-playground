@@ -23,6 +23,16 @@ documents = [
     "This document is the second document.",
     "And this is the third one.",
     "Is this the first document?",
+    "I must have that document!",
+    "Give me that document!",
+    "I like mangoes!",
+    "My son likes to eat strawberries."
+    "What time is it?",
+    "Did you fart?",
+    "You must have plagarized that document from somewhere!",
+    "When will Alan get a SWE job?",
+    "Maybe someone nice can refer him.",
+    "Throw a few pickles in there."
 ]
 
 # Convert documents to vectors
@@ -47,7 +57,7 @@ logging.info(
 )
 
 # Query with a new document
-query_document = "This is a new document."
+query_document = input("What's your query? ")
 query_vector = model.encode([query_document]).astype("float32")
 
 # Search for the 2 nearest neighbors
