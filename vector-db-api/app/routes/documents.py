@@ -4,11 +4,13 @@ from ..models.document import Document, DocumentCreate, DocumentUpdate, SearchQu
 import uuid
 from ..services.vector_store import VectorStore
 import numpy as np
+from sentence_transformers import SentenceTransformer
 
 router = APIRouter()
 
 # Initialize the service
 vector_store = VectorStore()
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 @router.post("/documents/", response_model=Document)
