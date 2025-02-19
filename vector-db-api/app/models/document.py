@@ -5,7 +5,6 @@ from typing import Optional, Dict
 # Modify to use a vector database
 class DocumentBase(BaseModel):
     content: str
-    metadata: Dict = {}
 
 
 class DocumentCreate(DocumentBase):
@@ -14,7 +13,6 @@ class DocumentCreate(DocumentBase):
 
 class DocumentUpdate(BaseModel):
     content: Optional[str] = None
-    metadata: Optional[Dict] = None
 
 
 class Document(DocumentBase):
