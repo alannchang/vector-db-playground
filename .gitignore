@@ -1,2 +1,2 @@
 *venv*
-*.pyc
+*.pyc.DS_Store
