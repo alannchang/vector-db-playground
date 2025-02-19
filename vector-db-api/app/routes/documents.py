@@ -1,16 +1,23 @@
-from fastapi import APIRouter, HTTPException, Query
-from typing import List
-from ..models.document import Document, DocumentCreate, DocumentUpdate, SearchQuery
+"""API routes for managing documents and their vector embeddings."""
+
+import logging
+import time
 import uuid
-from ..services.vector_store import VectorStore
-import numpy as np
+from typing import List
+
+from fastapi import APIRouter, HTTPException
 from sentence_transformers import SentenceTransformer
+
+from app.models.document import Document, DocumentCreate, DocumentUpdate, SearchQuery
+from app.services.vector_store import VectorStore
 
 router = APIRouter()
 
 # Initialize the service
 vector_store = VectorStore()
+start_time = time.time()
 model = SentenceTransformer("all-MiniLM-L6-v2")
+logging.info("Model loaded in %.2f seconds.", time.time() - start_time)
 
 
 @router.post("/documents/", response_model=Document)
@@ -19,19 +26,17 @@ async def create_document(document: DocumentCreate):
     # Create a new document with a random ID
     doc_id = str(uuid.uuid4())
 
+    new_document = Document(
+        id=doc_id,
+        content=document.content,
+    )
+
     # Mock embedding for now (replace with actual embedding generation later)
-    mock_embedding = np.random.rand(384).astype(np.float32)
+    mock_embedding = model.encode(new_document).astype("float32")
 
     # Add vector to store with document ID
     vector_store.add_vector(doc_id, mock_embedding)
 
-    new_document = Document(
-        id=doc_id,
-        content=document.content,
-        metadata=document.metadata,
-        embedding=mock_embedding.tolist(),  # Convert numpy array to list for JSON
-        embedding_model="mock-model",
-    )
     return new_document
 
 
