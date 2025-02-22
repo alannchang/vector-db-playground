@@ -31,8 +31,7 @@ async def create_document(document: DocumentCreate):
         content=document.content,
     )
 
-    # Mock embedding for now (replace with actual embedding generation later)
-    mock_embedding = model.encode(new_document).astype("float32")
+    mock_embedding = model.encode([document.content]).astype("float32")
 
     # Add vector to store with document ID
     vector_store.add_vector(doc_id, mock_embedding)
@@ -43,7 +42,13 @@ async def create_document(document: DocumentCreate):
 @router.get("/documents/{doc_id}", response_model=Document)
 async def get_document(doc_id: str):
     """Retrieve a document by its ID."""
-    raise HTTPException(status_code=501, detail="Not implemented")
+    # raise HTTPException(status_code=501, detail="Not implemented")
+    print("checking vector store: ", vector_store.vector_data)
+    found_document = Document(
+        id=doc_id,
+        content="document.content",
+    )
+    return found_document
 
 
 @router.put("/documents/{doc_id}", response_model=Document)
