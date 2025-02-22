@@ -8,28 +8,32 @@ logger = logging.getLogger(__name__)
 
 class VectorStore:
     def __init__(self):
-        self.vector_data: np.ndarray = []
+        # Initialize as a dictionary to store both IDs and vectors
+        self.vector_data: Dict[str, np.ndarray] = {}
+        self.index = None
+        self.model = SentenceTransformer("all-MiniLM-L6-v2")
         logger.info("Initialized VectorStore")
 
     def add_vector(self, vector_id: str, vector: np.ndarray) -> None:
         """Add a vector to the store."""
-        logger.debug("adding to vector store")
-        self.vector_data.append(vector)
-        print("added to store: ", self.vector_data)
-        self.vector_data = np.vstack(self.vector_data)
-        # self.vector_data[vector_id] = vector
-        self._update_index()
+        # Store vector with its ID
+        self.vector_data[vector_id] = vector[0]  # Remove batch dimension
         logger.debug(f"Added vector {vector_id} to store")
+        self._update_index()
 
-    # def get_vector(self, vector_id: str) -> np.ndarray:
-    #     """Retrieve a vector from the store."""
-    #     return self.vector_data.get(vector_id)
+    def get_vector(self, vector_id: str) -> np.ndarray:
+        """Retrieve a vector from the store."""
+        return self.vector_data.get(vector_id)
 
     def _update_index(self) -> None:
-        """Update the index with the new vector."""
-        dimension = self.vector_data.shape[1]
-        index = faiss.IndexFlatL2(dimension)
-        index.add(self.vector_data)
+        """Update the index with all vectors."""
+        if not self.vector_data:
+            return
+
+        vectors = np.stack(list(self.vector_data.values()))
+        dimension = vectors.shape[1]
+        self.index = faiss.IndexFlatL2(dimension)
+        self.index.add(vectors)
 
     def _calculate_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """Calculate cosine similarity between two vectors."""

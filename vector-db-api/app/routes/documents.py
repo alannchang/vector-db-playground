@@ -3,10 +3,12 @@
 import logging
 import time
 import uuid
-from typing import List
+from typing import List, Union
 
 from fastapi import APIRouter, HTTPException
 from sentence_transformers import SentenceTransformer
+from transformers import AutoTokenizer
+
 
 from app.models.document import Document, DocumentCreate, DocumentUpdate, SearchQuery
 from app.services.vector_store import VectorStore
@@ -16,7 +18,9 @@ router = APIRouter()
 # Initialize the service
 vector_store = VectorStore()
 start_time = time.time()
-model = SentenceTransformer("all-MiniLM-L6-v2")
+tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
+
+
 logging.info("Model loaded in %.2f seconds.", time.time() - start_time)
 
 
@@ -31,23 +35,26 @@ async def create_document(document: DocumentCreate):
         content=document.content,
     )
 
-    mock_embedding = model.encode([document.content]).astype("float32")
+    tokens = tokenizer.tokenize(document.content)
+    ids = tokenizer.convert_tokens_to_ids(tokens)
+
+    print("decoded: ", tokenizer.decode(ids, skip_special_tokens=True))
 
     # Add vector to store with document ID
-    vector_store.add_vector(doc_id, mock_embedding)
+    vector_store.add_vector(doc_id, tokens)
 
     return new_document
 
 
-@router.get("/documents/{doc_id}", response_model=Document)
+@router.get("/documents/{doc_id}", response_model=Union[Document, None])
 async def get_document(doc_id: str):
     """Retrieve a document by its ID."""
     # raise HTTPException(status_code=501, detail="Not implemented")
-    print("checking vector store: ", vector_store.vector_data)
-    found_document = Document(
-        id=doc_id,
-        content="document.content",
-    )
+    print("checking vector store: ", vector_store.vector_data, doc_id)
+    found_document = vector_store.get_vector(doc_id)
+
+    print("decoded doc: ", found_document)
+
     return found_document
 
 
