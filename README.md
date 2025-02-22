@@ -1,8 +1,3 @@
-# vector-db-playground
-
-Here's a comprehensive README.md template:
-
-````markdown:README.md
 # Vector DB API
 
 A FastAPI-based vector database API for document embeddings and similarity search.
@@ -10,16 +5,18 @@ A FastAPI-based vector database API for document embeddings and similarity searc
 ## Setup
 
 ### Prerequisites
+
 - Python 3.9 or higher
 - pip (Python package installer)
 
 ### First-time Setup
 
 1. Clone the repository
+
 ```bash
 git clone <repository-url>
 cd vector-db-api
-````
+```
 
 2. Create and activate virtual environment
 
@@ -104,8 +101,3 @@ Once running, view the API documentation at:
 
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
-
-```
-
-This provides a clear path for new team members to get started and maintain the project. Feel free to customize based on your specific project needs!
-```
