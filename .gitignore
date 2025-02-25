@@ -1,6 +1,5 @@
 *venv*
 *.pyc
-vector-db-api/*
 **/*.pyc
 **/*.pyo
 **/*.pyd
