@@ -2,6 +2,7 @@ import numpy as np
 from typing import List, Tuple, Dict
 import logging
 import faiss
+from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
