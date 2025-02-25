@@ -27,23 +27,11 @@ logging.info("Model loaded in %.2f seconds.", time.time() - start_time)
 @router.post("/documents/", response_model=Document)
 async def create_document(document: DocumentCreate):
     """Create a new document and store its vector embedding."""
-    # Create a new document with a random ID
     doc_id = str(uuid.uuid4())
-
-    new_document = Document(
-        id=doc_id,
-        content=document.content,
-    )
-
-    tokens = tokenizer.tokenize(document.content)
-    ids = tokenizer.convert_tokens_to_ids(tokens)
-
-    print("decoded: ", tokenizer.decode(ids, skip_special_tokens=True))
-
-    # Add vector to store with document ID
-    vector_store.add_vector(doc_id, tokens)
-
-    return new_document
+    
+    vector_store.add_document(doc_id, document.content)
+    
+    return Document(id=doc_id, content=document.content)
 
 
 @router.get("/documents/{doc_id}", response_model=Union[Document, None])
