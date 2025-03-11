@@ -63,7 +63,9 @@ packaging==24.2
 pillow==11.1.0
     # via sentence-transformers
 pydantic==2.10.6
-    # via fastapi
+    # via
+    #   fastapi
+    #   vector-db-api (pyproject.toml)
 pydantic-core==2.27.2
     # via pydantic
 python-dotenv==1.0.1

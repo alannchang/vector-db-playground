@@ -1,10 +1,15 @@
 pyproject.toml
 app/__init__.py
 app/main.py
+app/config/__iniit__.py
+app/config/settings.py
 app/models/__init__.py
 app/models/document.py
+app/models/search.py
 app/routes/__init__.py
 app/routes/documents.py
+app/services/embedding.py
+app/services/index_factory.py
 app/services/vector_store.py
 vector_db_api.egg-info/PKG-INFO
 vector_db_api.egg-info/SOURCES.txt
